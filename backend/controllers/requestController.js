@@ -2,17 +2,35 @@ const asyncHandler = require('express-async-handler')
 const Request = require('../models/requestModel')
 
 const createRequest = asyncHandler(async (req, res) => {
-  const { title, description, type } = req.body
+  try {
+    const userId = req.user._id
+    
+    const { title, description, type } = req.body
+    if(!req.body) {
+      res.status(400)
+      throw new Error("All the fields are required")
+    }
 
-  const request = await Request.create({
-    user: req.user._id,
-    title,
-    description,
-    type,
-    status: 'pendiente',
-  })
+    if (!req.user) {
+      res.status(401)
+      throw new Error('Error de autenticación: no se encontró un usuario en la solicitud')
+    }
 
-  res.status(201).json(request)
+    const request = new Request({
+      user: userId,
+      title,
+      description,
+      type,
+      status: 'pendiente',
+    })
+
+/* This code is handling the creation of a new request. */
+    const createdRequest = await request.save()
+    res.status(201).json(createdRequest)
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' })
+    console.log(error)
+  }
 })
 
 const cancelRequest = asyncHandler(async (req, res) => {
