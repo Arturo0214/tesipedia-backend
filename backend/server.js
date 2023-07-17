@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: false}))
 
 app.use('/users', require('./routes/userRoutes'))
 app.use('/requests', require('./routes/requestRoutes'))
+app.use('/payments', require('./routes/paymentRoutes')) // Agregamos la ruta para los pagos
 
 app.use(errorHandler)
 app.listen(port, () => console.log(`Server iniciado en el puerto ${port}`))
