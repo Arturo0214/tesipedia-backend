@@ -1,9 +1,10 @@
+const asyncHandler = require('express-async-handler')
 const Payment = require('../models/paymentModel')
 
 // Controlador para crear un nuevo pago
-const createPayment = async (req, res) => {
+const createPayment = asyncHandler(async (req, res) => {
   try {
-    const { request, amount, currency, paymentMethod } = req.body;
+    const { request, amount, currency, paymentMethod } = req.body
 
     const payment = new Payment({
       request,
@@ -11,18 +12,19 @@ const createPayment = async (req, res) => {
       currency,
       paymentMethod,
       status: 'pendiente'
-    });
+    })
 
-    await payment.save();
+    await payment.save()
 
     res.status(201).json({ success: true, payment })
   } catch (error) {
+    console.log(error)
     res.status(500).json({ success: false, error: error.message })
   }
-};
+})
 
 // Controlador para obtener detalles de un pago por ID
-const getPaymentById = async (req, res) => {
+const getPaymentById = asyncHandler(async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.id).populate('request')
 
@@ -34,10 +36,10 @@ const getPaymentById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message })
   }
-}
+})
 
 // Controlador para actualizar el estado de un pago por ID
-const updatePaymentStatus = async (req, res) => {
+const updatePaymentStatus = asyncHandler(async (req, res) => {
   try {
     const { status } = req.body
 
@@ -45,7 +47,7 @@ const updatePaymentStatus = async (req, res) => {
       req.params.id,
       { $set: { status } },
       { new: true }
-    )
+    );
 
     if (!payment) {
       return res.status(404).json({ success: false, error: 'Pago no encontrado' })
@@ -55,10 +57,10 @@ const updatePaymentStatus = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message })
   }
-}
+});
 
 // Controlador para cancelar un pago por ID
-const cancelPayment = async (req, res) => {
+const cancelPayment = asyncHandler(async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.id)
 
@@ -77,6 +79,7 @@ const cancelPayment = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, error: error.message })
   }
-}
+})
 
 module.exports = { cancelPayment, getPaymentById, createPayment, updatePaymentStatus }
+
