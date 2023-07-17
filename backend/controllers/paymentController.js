@@ -6,13 +6,20 @@ const createPayment = asyncHandler(async (req, res) => {
   try {
     const { request, amount, currency, paymentMethod } = req.body
 
+    // Verificar si la solicitud ya tiene un pago asociado
+    const existingPayment = await Payment.findOne({ request })
+
+    if (existingPayment) {
+      return res.status(400).json({ success: false, error: 'La solicitud ya tiene un pago asociado' })
+    }
+
     const payment = new Payment({
       request,
       amount,
       currency,
       paymentMethod,
       status: 'pendiente'
-    })
+    });
 
     await payment.save()
 
@@ -81,5 +88,27 @@ const cancelPayment = asyncHandler(async (req, res) => {
   }
 })
 
-module.exports = { cancelPayment, getPaymentById, createPayment, updatePaymentStatus }
+const completePayment = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  // Busca el pago en la base de datos por su ID
+  const payment = await Payment.findById(id);
+
+  if (!payment) {
+    return res.status(404).json({ success: false, error: 'Pago no encontrado' });
+  }
+
+  // Verifica si el estado actual del pago es 'pendiente'
+  if (payment.status === 'pendiente') {
+    // Actualiza el estado del pago a 'completado'
+    payment.status = 'completado';
+    await payment.save();
+
+    res.json({ success: true, payment });
+  } else {
+    res.status(400).json({ success: false, error: 'El pago no está pendiente' });
+  }
+});
+
+module.exports = { cancelPayment, getPaymentById, createPayment, updatePaymentStatus, completePayment }
 
