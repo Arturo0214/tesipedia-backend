@@ -28,6 +28,7 @@ const createRequest = asyncHandler(async (req, res) => {
     })
 
 /* This code is handling the creation of a new request. */
+    request.costo = req.body.costo;
     const createdRequest = await request.save()
     res.status(201).json(createdRequest)
   } catch (error) {
