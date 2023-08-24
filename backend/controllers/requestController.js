@@ -5,7 +5,7 @@ const createRequest = asyncHandler(async (req, res) => {
   try {
     const userId = req.user._id
     
-    const { title, description, type } = req.body
+    const { title, areaEstudios, requerimientos, tipoTrabajo, otroTipoTrabajo, extension } = req.body
     if(!req.body) {
       res.status(400)
       throw new Error("All the fields are required")
@@ -19,9 +19,12 @@ const createRequest = asyncHandler(async (req, res) => {
     const request = new Request({
       user: userId,
       title,
-      description,
-      type,
-      status: 'pendiente',
+      areaEstudios,
+      requerimientos,
+      tipoTrabajo,
+      otroTipoTrabajo,
+      extension,
+      status: 'pendiente'
     })
 
 /* This code is handling the creation of a new request. */
@@ -73,7 +76,7 @@ const updateRequest = asyncHandler(async (req, res) => {
 
   if (!req.user.isAdmin) {
     res.status(403)
-    throw new Error('Acceso denegado. Solo los usuarios administradores pueden actualizar solicitudes.');
+    throw new Error('Acceso denegado. Solo los usuarios administradores pueden actualizar solicitudes.')
   }
 
   const request = await Request.findById(requestId)

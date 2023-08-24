@@ -19,7 +19,7 @@ const createPayment = asyncHandler(async (req, res) => {
       currency,
       paymentMethod,
       status: 'pendiente'
-    });
+    })
 
     await payment.save()
 
