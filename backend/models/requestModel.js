@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const requestSchema = mongoose.Schema({
   user: {
@@ -21,17 +21,21 @@ const requestSchema = mongoose.Schema({
     required: [true, 'Por favor, selecciona un nivel de estudios'],
   },
   requerimientos: {
-    type: String, 
+    type: String, // Cambiado a String para almacenar el nombre del archivo
     required: [true, 'Por favor, ingresa los requerimientos del trabajo de investigación'],
   },
   tipoTrabajo: {
     type: String,
     required: [true, 'Por favor, selecciona un tipo de trabajo'],
   },
-  otroTipoTrabajo: String,
+  otroTipoTrabajo: String, // Campo opcional si se selecciona 'Otro' en tipoTrabajo
   extension: {
     type: Number,
     required: [true, 'Por favor, ingresa la extensión del proyecto (cuartillas)'],
+  },
+  costo: {
+    type: Number,
+    default: 0,
   },
   status: {
     type: String,
