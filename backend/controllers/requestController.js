@@ -43,7 +43,7 @@ const createRequest = asyncHandler(async (req, res) => {
       otroTipoTrabajo,
       extension,
       costo: calculatedCost,
-      status: 'pendiente'
+      status: 'pendiente',
     })
     const createdRequest = await request.save()
     res.status(201).json(createdRequest)
