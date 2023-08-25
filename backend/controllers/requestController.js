@@ -5,7 +5,7 @@ const createRequest = asyncHandler(async (req, res) => {
   try {
     const userId = req.user._id
     
-    const { title, areaEstudios, requerimientos, tipoTrabajo, otroTipoTrabajo, extension } = req.body
+    const { title, areaEstudios, nivelEstudios, requerimientos, tipoTrabajo, otroTipoTrabajo, extension } = req.body
     if(!req.body) {
       res.status(400)
       throw new Error("All the fields are required")
@@ -20,6 +20,7 @@ const createRequest = asyncHandler(async (req, res) => {
       user: userId,
       title,
       areaEstudios,
+      nivelEstudios,
       requerimientos,
       tipoTrabajo,
       otroTipoTrabajo,
