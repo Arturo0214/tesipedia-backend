@@ -2,9 +2,8 @@ const asyncHandler = require('express-async-handler')
 const Request = require('../models/requestModel')
 
 const createRequest = asyncHandler(async (req, res) => {
-
   try {
-    const userId = req.user._id
+    const userId = req.user._id;
     
     const { title, areaEstudios, nivelEstudios, requerimientos, tipoTrabajo, otroTipoTrabajo, extension } = req.body
     if (!req.body) {
@@ -17,20 +16,20 @@ const createRequest = asyncHandler(async (req, res) => {
       throw new Error('Error de autenticación: no se encontró un usuario en la solicitud')
     }
 
- // Calcula el costo basado en el área de estudios, nivel de estudios y la extensión
-    let costoPorPagina = 0
+    // Calcula el costo basado en el área de estudios, nivel de estudios y la extensión
+    let costoPorPagina = 0;
     if (nivelEstudios === 'Maestría') {
-      costoPorPagina = 20
+      costoPorPagina = 20;
     } else if (nivelEstudios === 'Doctorado') {
-      costoPorPagina = 40
+      costoPorPagina = 40;
     }
 
-    let calculatedCost = 0
+    let calculatedCost = 0;
     if (areaEstudios && extension) {
       if (areaEstudios === 'Area1' || areaEstudios === 'Area2') {
-        calculatedCost = (130 + costoPorPagina) * extension
+        calculatedCost = (130 + costoPorPagina) * extension;
       } else if (areaEstudios === 'Area3' || areaEstudios === 'Area4') {
-        calculatedCost = (110 + costoPorPagina) * extension
+        calculatedCost = (110 + costoPorPagina) * extension;
       }
     }
 
@@ -43,10 +42,9 @@ const createRequest = asyncHandler(async (req, res) => {
       tipoTrabajo,
       otroTipoTrabajo,
       extension,
-      costo: calculatedCost, // Asigna el costo calculado
+      costo: calculatedCost,
       status: 'pendiente'
     })
-
     const createdRequest = await request.save()
     res.status(201).json(createdRequest)
   } catch (error) {
