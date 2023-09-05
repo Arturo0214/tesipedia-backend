@@ -3,6 +3,12 @@ const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
 
+
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET,{
+        expiresIn: '30d'
+    })
+}
 const loginUser = asyncHandler (async (req, res) => {
     //destructuring de la informacion del body request
     const {email, password} = req.body
@@ -67,11 +73,6 @@ const getMisDatos = asyncHandler (async (req, res) => {
     res.json(req.user)
 })
 
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET,{
-        expiresIn: '30d'
-    })
-}
 
 module.exports = {
     loginUser,
