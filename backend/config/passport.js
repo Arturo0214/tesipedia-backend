@@ -31,8 +31,8 @@ passport.use(
 passport.use(
   new GoogleStrategy(
     {
-      clientID: '1090583893730-m3ofc31f4h7t9vjme924vlfgf141rrqb.apps.googleusercontent.com',
-      clientSecret: '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',
+      clientID: '',
+      clientSecret: '',
       callbackURL: 'http://localhost:5000', // URL de redirección después de la autenticación de Google
     },
     async (accessToken, refreshToken, profile, done) => {
