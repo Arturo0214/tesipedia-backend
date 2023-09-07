@@ -7,6 +7,7 @@ const {
   getPaymentById,
   updatePaymentStatus,
   completePayment,
+  getStripeSecretKey
 } = require('../controllers/paymentController');
 const {
   checkPaymentExists,
@@ -19,12 +20,17 @@ const {
 // Ruta para crear un nuevo pago
 router.route('/').post(
   protect,
-  requireStripeApiKey, // Middleware de autenticación
-  additionalSecurity, // Middleware de seguridad adicional
   validatePaymentAmount, // Middleware para validar el monto del pago
   auditPaymentAction, // Middleware para auditoría de acciones
   createPayment
 );
+
+// Ruta para obtener la clave secreta de Stripe
+router.route('/get-stripe-secret-key').get(
+  protect,
+  getStripeSecretKey // Controlador para obtener la clave secreta de Stripe
+);
+
 
 // Ruta para obtener un pago por su ID
 router.route('/:id').get(
@@ -62,6 +68,8 @@ router.route('/:id/complete').put(
   auditPaymentAction, // Middleware para auditoría de acciones
   completePayment
 );
+
+
 
 module.exports = router;
 
