@@ -14,7 +14,6 @@ const {
   validatePaymentAmount,
   checkPaymentStatus,
   auditPaymentAction,
-  additionalSecurity,
 } = require('../middleware/paymentMiddleware');
 
 // Ruta para crear un nuevo pago
