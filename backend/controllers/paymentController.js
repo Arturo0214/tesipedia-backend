@@ -9,7 +9,6 @@ const createPayment = asyncHandler(async (req, res) => {
 
     // Verificar si la solicitud ya tiene un pago asociado
     const existingPayment = await Payment.findOne({ request });
-
     if (existingPayment) {
       return res.status(400).json({ success: false, error: 'La solicitud ya tiene un pago asociado' });
     }
@@ -47,6 +46,7 @@ const createPayment = asyncHandler(async (req, res) => {
 
 // Controlador para obtener detalles de un pago por ID
 const getPaymentById = asyncHandler(async (req, res) => {
+
   try {
     const payment = await Payment.findById(req.params.id).populate('request')
 
