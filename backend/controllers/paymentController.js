@@ -38,6 +38,7 @@ const createPayment = asyncHandler(async (req, res) => {
       success: true,
       payment,
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: error.message });
@@ -134,5 +135,19 @@ const completePayment = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { cancelPayment, getPaymentById, createPayment, updatePaymentStatus, completePayment }
+// Controlador para obtener la clave secreta de Stripe
+const getStripeSecretKey = async (req, res) => {
+  try {
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    if (secretKey) {
+      res.json({ secretKey });
+    } else {
+      res.status(500).json({ error: 'La Stripe Secret Key no está configurada en el servidor.' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+module.exports = { cancelPayment, getPaymentById, createPayment, updatePaymentStatus, completePayment, getStripeSecretKey }
 
