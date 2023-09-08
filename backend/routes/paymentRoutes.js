@@ -11,7 +11,6 @@ const {
 } = require('../controllers/paymentController');
 const {
   checkPaymentExists,
-  validatePaymentAmount,
   checkPaymentStatus,
   auditPaymentAction,
 } = require('../middleware/paymentMiddleware');
@@ -19,7 +18,6 @@ const {
 // Ruta para crear un nuevo pago
 router.route('/').post(
   protect,
-  validatePaymentAmount, // Middleware para validar el monto del pago
   auditPaymentAction, // Middleware para auditoría de acciones
   createPayment
 );
@@ -61,7 +59,6 @@ router.route('/:id/cancel').put(
 // Ruta para marcar un pago como completado por su ID
 router.route('/:id/complete').put(
   protect,
-  requireStripeApiKey, // Middleware de autenticación
   checkPaymentExists, // Middleware para verificar si un pago existe por su ID
   checkPaymentStatus('pendiente'), // Middleware para verificar el estado del pago
   auditPaymentAction, // Middleware para auditoría de acciones
