@@ -1,23 +1,33 @@
 const asyncHandler = require('express-async-handler');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Payment = require('../models/paymentModel');
+const Request = require('../models/requestModel'); // Asegúrate de importar el modelo Request
 
-// Controlador para crear un nuevo pago
 const createPayment = asyncHandler(async (req, res) => {
   try {
-    const { request, currency, metodoPago, costo } = req.body;
+    const { id, request, currency, metodoPago, costo } = req.body;
+
+    // Busca la solicitud por su ID
+    const foundRequest = await Request.findById(request);
+
+    if (!foundRequest) {
+      return res.status(400).json({ success: false, error: 'La solicitud no existe' });
+    }
 
     // Verificar si la solicitud ya tiene un pago asociado
     const existingPayment = await Payment.findOne({ request });
+
     if (existingPayment) {
       return res.status(400).json({ success: false, error: 'La solicitud ya tiene un pago asociado' });
     }
 
     // Crear un intento de pago en Stripe
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: costo * 100, // El monto en centavos
-      currency,
-      payment_method_types: [metodoPago], // Tipo de método de pago, ej. 'card'
+      amount: costo,
+      currency: 'MXN',
+      payment_method: id,
+      payment_method_types: [metodoPago], 
+      confirm: true
     });
 
     // Crear el registro del pago en la base de datos
