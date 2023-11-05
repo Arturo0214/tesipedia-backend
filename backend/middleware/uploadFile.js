@@ -47,10 +47,6 @@ const handleFileUpload = (req, res, next) => {
   
       // Si el archivo se subió correctamente, registra el éxito y pasa al siguiente middleware
       console.log('Archivo subido exitosamente:', req.file);
-      
-      // Acceder y guardar el originalname del archivo subido
-      const originalname = req.file.originalname;
-      console.log('Originalname del archivo:', originalname);
   
       next();
     });
