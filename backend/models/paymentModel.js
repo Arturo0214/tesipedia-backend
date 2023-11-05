@@ -15,7 +15,7 @@ const paymentSchema = mongoose.Schema({
     required: true,
   },
   costo: {
-    type: Number, // Cambia el tipo de dato de Number a String
+    type: Number,
     required: true,
   },
   status: {
