@@ -1,30 +1,30 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const paymentSchema = mongoose.Schema({
   request: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Request',
-    required: true
-  },
-  amount: {
-    type: Number,
-    required: [true, 'Por favor, ingresa el monto']
+    required: true,
   },
   currency: {
     type: String,
-    required: [true, 'Por favor, ingresa la moneda']
+    required: true,
   },
-  paymentMethod: {
+  metodoPago: {
     type: String,
-    required: [true, 'Por favor, ingresa el método de pago']
+    required: true,
+  },
+  costo: {
+    type: Number, // Cambia el tipo de dato de Number a String
+    required: true,
   },
   status: {
     type: String,
     enum: ['pendiente', 'completado', 'cancelado'],
-    default: 'pendiente'
-  }
+    default: 'pendiente',
+  },
 }, {
-  timestamps: true
-})
+  timestamps: true,
+});
 
-module.exports = mongoose.model('Payment', paymentSchema)
+module.exports = mongoose.model('Payment', paymentSchema);

@@ -3,6 +3,12 @@ const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
 
+
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET,{
+        expiresIn: '30d'
+    })
+}
 const loginUser = asyncHandler (async (req, res) => {
     //destructuring de la informacion del body request
     const {email, password} = req.body
@@ -67,14 +73,44 @@ const getMisDatos = asyncHandler (async (req, res) => {
     res.json(req.user)
 })
 
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET,{
-        expiresIn: '30d'
-    })
-}
+const getUserById = asyncHandler(async (req, res) => {
+    const userId = req.params.id
+
+    const user = await User.findById(userId)
+
+    if (!req.user.isAdmin) {
+        res.status(403);
+        throw new Error ("Solo el administrador puede realizar esta acción");
+    }
+
+    res.json(user)
+
+})
+
+const getAllUsers = asyncHandler(async (req, res) => {
+  const user = req.user; // Obtén el usuario actual desde el token
+
+  if (!user.isAdmin) {
+    res.status(403); // 403 Forbidden si el usuario no es un administrador
+    throw new Error('No tienes permiso para realizar esta acción');
+  }
+
+  // Si el usuario es un administrador, obtén todos los usuarios
+  const users = await User.find({});
+
+  if (users) {
+    res.status(200).json(users);
+  } else {
+    res.status(404);
+    throw new Error('No se encontraron usuarios');
+  }
+});
+
 
 module.exports = {
     loginUser,
     registerUser,
-    getMisDatos
+    getMisDatos,
+    getAllUsers,
+    getUserById
 }
