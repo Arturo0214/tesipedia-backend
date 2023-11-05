@@ -28,7 +28,6 @@ router.route('/get-stripe-secret-key').get(
   getStripeSecretKey // Controlador para obtener la clave secreta de Stripe
 );
 
-
 // Ruta para obtener un pago por su ID
 router.route('/:id').get(
   protect,
