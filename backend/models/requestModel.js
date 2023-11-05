@@ -21,8 +21,12 @@ const requestSchema = mongoose.Schema({
     required: [true, 'Por favor, selecciona un nivel de estudios'],
   },
   requerimientos: {
-    type: String, // Cambiado a String para almacenar el nombre del archivo
-    required: [true, 'Por favor, ingresa los requerimientos del trabajo de investigación'],
+    text: {
+      type: String,
+    },
+    file: {
+      type: Object,
+    },
   },
   tipoTrabajo: {
     type: String,
@@ -44,6 +48,6 @@ const requestSchema = mongoose.Schema({
   },
 }, {
   timestamps: true,
-})
+});
 
-module.exports = mongoose.model('Request', requestSchema)
+module.exports = mongoose.model('Request', requestSchema);

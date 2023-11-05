@@ -20,7 +20,7 @@ const createPayment = asyncHandler(async (req, res) => {
     if (existingPayment) {
       return res.status(400).json({ success: false, error: 'La solicitud ya tiene un pago asociado' });
     }
-
+    
     // Crear un intento de pago en Stripe
     const paymentIntent = await stripe.paymentIntents.create({
       amount: costo,
